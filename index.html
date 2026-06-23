@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cosmic Message</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+        /* --- GLOBAL STYLE & BACKGROUND COSMIC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1626;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(26, 54, 93, 0.5) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(13, 148, 136, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #0a101d 0%, #050810 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* --- MAIN CONTAINER (LAPTOP OPTIMIZED LANDSCAPE) --- */
+        .card-frame {
+            width: 100%;
+            max-width: 800px;
+            height: 520px;
+            background: linear-gradient(135deg, #0f1b2d 0%, #09101c 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.7), inset 0 0 30px rgba(212, 175, 55, 0.05);
+            position: relative;
+            padding: 40px 50px;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .card-frame.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Cosmic background star particles */
+        .card-frame::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(white 1px, transparent 0);
+            background-size: 40px 40px;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        .header-title {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #d4af37;
+            letter-spacing: 3px;
+            text-align: center;
+            line-height: 1.6;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .chapter-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            font-style: italic;
+            color: #8fa0ba;
+            margin-bottom: 5px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* --- MAIN BUTTONS --- */
+        .btn-open-cosmos {
+            font-family: 'Cinzel', serif;
+            background: transparent;
+            border: 1.5px solid #d4af37;
+            color: #d4af37;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-open-cosmos:hover {
+            background: #d4af37;
+            color: #09101c;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- NAVIGATION FOOTER --- */
+        .nav-footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding-top: 15px;
+            z-index: 10;
+        }
+
+        .indicator-box {
+            display: flex;
+            align-items: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14px;
+            color: #5c6f8a;
+            gap: 10px;
+        }
+
+        .bar-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .bar {
+            width: 35px;
+            height: 3px;
+            background: #1a2a42;
+            border-radius: 2px;
+        }
+
+        .bar.active {
+            background: #d4af37;
+        }
+
+        /* --- NAV ACTION BUTTONS (RESIZED & COMPACT TO PREVENT OVERLAP) --- */
+        .btn-nav-action {
+            font-family: 'Cinzel', serif;
+            background: transparent;
+            border: 0.5px solid rgba(212, 175, 55, 0.25);
+            color: #d4af37;
+            padding: 4px 10px; /* Reduced padding */
+            font-size: 8.5px; /* Smaller text size */
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav-action:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+        }
+
+        /* ==========================================
+           PAGE CONTENT CUSTOMIZATIONS
+           ========================================== */
+
+        /* PAGE 1: COMPASS */
+        .compass-svg {
+            width: 180px;
+            height: 180px;
+            margin: 15px 0;
+        }
+
+        /* PAGE 2: OPENING BOOK ACCORDION */
+        .touch-instruction {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: #a3b8cc;
+        }
+
+        .book-container {
+            width: 320px;
+            height: 220px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .book-left, .book-right {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            top: 0;
+        }
+
+        .book-left {
+            left: 0;
+            background: linear-gradient(to right, #091222, #15243f);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .book-right {
+            right: 0;
+            background: #f7f4eb;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .corner-ornament {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            opacity: 0.5;
+        }
+        .top-left { top: 8px; left: 8px; }
+        .bottom-right { bottom: 8px; right: 8px; transform: rotate(180deg); }
+
+        /* PAGE 3: SURAT KLASIK (LEBAR) */
+        .paper-sheet {
+            width: 100%;
+            height: 280px;
+            background: #fdfbf7;
+            border-radius: 8px;
+            padding: 30px 40px;
+            color: #1e293b;
+            font-family: 'Cormorant Garamond', serif;
+            position: relative;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .paper-sheet::before {
+            content: '';
+            position: absolute;
+            top: 10px; bottom: 10px; left: 10px; right: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .letter-to { font-size: 22px; font-weight: 600; margin-bottom: 15px; color: #0f172a; }
+        .letter-body { font-size: 16px; line-height: 1.7; margin-bottom: 15px; color: #334155; }
+        .letter-sign { margin-top: 20px; font-size: 15px; text-align: right; }
+
+        /* PAGE 4: INTERACTIVE TIMELINE */
+        .timeline-book {
+            width: 100%;
+            height: 280px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .timeline-left-map {
+            flex: 1.2;
+            background: #fbf9f3;
+            position: relative;
+            padding: 15px;
+        }
+
+        .map-inner-title {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .tooltip-bubble {
+            position: absolute;
+            background: #0f172a;
+            color: #ffffff;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .bubble-1 { top: 50px; left: 30px; }
+        .bubble-2 { bottom: 40px; right: 30px; }
+
+        .timeline-right-text {
+            flex: 1;
+            background: #ffffff;
+            border-left: 1px solid #e2e8f0;
+            padding: 30px;
+            color: #334155;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15px;
+            line-height: 1.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* PAGE 5: FINAL WISHES */
+        .ceremony-box {
+            width: 100%;
+            height: 260px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-number {
+            position: absolute;
+            font-family: 'Cinzel', serif;
+            font-size: 55px;
+            color: rgba(212, 175, 55, 0.04);
+            font-weight: 700;
+        }
+        .num-top { top: 10px; }
+        .num-left { left: 20px; }
+        .num-right { right: 20px; }
+        .num-bottom { bottom: 10px; }
+
+        .ceremony-title {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            color: #d4af37;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .ceremony-p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #cbd5e1;
+            text-align: center;
+            max-width: 500px;
+            margin-bottom: 8px;
+        }
+
+        .hbd-banner {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            color: #d4af37;
+            letter-spacing: 3px;
+            margin-top: 10px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        /* --- MOBILE RESPONSIVE LAYOUT BREAKDOWN --- */
+        @media (max-width: 768px) {
+            .card-frame {
+                height: auto;
+                min-height: 550px;
+                padding: 25px 20px;
+            }
+            .paper-sheet { height: auto; padding: 20px 15px; }
+            .timeline-book { flex-direction: column; height: 320px; }
+            .timeline-right-text { border-left: none; border-top: 1px solid #e2e8f0; padding: 15px; }
+            .book-container { width: 100%; max-width: 240px; height: 180px; }
+            .ceremony-box { height: auto; padding: 30px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <svg style="display: none;">
+        <g id="gold-corner">
+            <path d="M 0 0 L 18 0 L 18 1.5 L 1.5 1.5 L 1.5 18 L 0 18 Z" fill="#d4af37"/>
+        </g>
+    </svg>
+
+    <div class="card-frame active" id="page-1">
+        <div class="chapter-title">The Arrival (Landing)</div>
+        <div class="header-title">YOU'VE RECEIVED A<br>MESSAGE FROM THE STARS</div>
+
+        <svg class="compass-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="0.6"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(212,175,55,0.25)" stroke-width="0.4" stroke-dasharray="1,1"/>
+            <text x="50" y="14" font-family="Cinzel" font-size="4" fill="#8fa0ba" text-anchor="middle">N</text>
+            <text x="50" y="90" font-family="Cinzel" font-size="4" fill="#8fa0ba" text-anchor="middle">S</text>
+            <text x="14" y="51.5" font-family="Cinzel" font-size="4" fill="#8fa0ba" text-anchor="middle">W</text>
+            <text x="86" y="51.5" font-family="Cinzel" font-size="4" fill="#8fa0ba" text-anchor="middle">E</text>
+            <path d="M 50 18 L 52.5 50 L 50 53 Z" fill="none" stroke="#d4af37" stroke-width="0.4"/>
+            <path d="M 50 18 L 47.5 50 L 50 53 Z" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="0.4"/>
+            <path d="M 50 82 L 52.5 50 L 50 47 Z" fill="none" stroke="#d4af37" stroke-width="0.4"/>
+            <line x1="30" y1="30" x2="70" y2="70" stroke="rgba(212,175,55,0.15)" stroke-width="0.4"/>
+            <line x1="70" y1="30" x2="30" y2="70" stroke="rgba(212,175,55,0.15)" stroke-width="0.4"/>
+        </svg>
+
+        <button class="btn-open-cosmos" onclick="navigateTo(2)">Open The Cosmos →</button>
+    </div>
+
+
+    <div class="card-frame" id="page-2">
+        <div class="chapter-title">Preparation</div>
+        <div class="touch-instruction">Waiting for your touch.</div>
+
+        <div class="book-container" onclick="navigateTo(3)">
+            <div class="book-left">
+                <svg class="corner-ornament top-left" viewBox="0 0 15 15"><use href="#gold-corner"/></svg>
+                <svg class="corner-ornament bottom-right" viewBox="0 0 15 15"><use href="#gold-corner"/></svg>
+                <svg width="100%" height="100%"><line x1="0" y1="110" x2="160" y2="150" stroke="rgba(212,175,55,0.15)" stroke-width="1"/></svg>
+            </div>
+            <div class="book-right">
+                <svg class="corner-ornament top-left" viewBox="0 0 15 15" style="transform: scaleX(-1); left:auto; right:6px;"><use href="#gold-corner"/></svg>
+                <svg class="corner-ornament bottom-right" viewBox="0 0 15 15" style="transform: scaleY(-1); bottom:auto; top:6px;"><use href="#gold-corner"/></svg>
+                <svg width="100%" height="100%"><line x1="160" y1="110" x2="0" y2="150" stroke="rgba(0,0,0,0.08)" stroke-width="1"/></svg>
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <button class="btn-nav-action" onclick="navigateTo(1)">← BACK</button>
+            <div class="indicator-box">Ready to Open</div>
+            <button class="btn-nav-action" onclick="navigateTo(3)">NEXT →</button>
+        </div>
+    </div>
+
+
+    <div class="card-frame" id="page-3">
+        <div style="width:100%">
+            <div class="chapter-title">Chapter 1: The Cosmic Spark</div>
+            <div class="header-title" style="font-size: 11px; margin-bottom: 10px;">(Personalized Greeting)</div>
+        </div>
+
+        <div class="paper-sheet">
+            <div class="letter-to">To My Starlight,</div>
+            <div class="letter-body">It is not simply another year that has passed, but another beautiful solar orbit you have graced with your celestial presence.</div>
+            <div class="letter-body">Every single day we share feels like a universe of infinite warmth.</div>
+            <div class="letter-sign">With all my celestial love,<br><strong>[Your Name]</strong></div>
+        </div>
+
+        <div class="nav-footer">
+            <button class="btn-nav-action" onclick="navigateTo(2)">← BACK</button>
+            <div class="indicator-box">
+                <div class="bar-container"><div class="bar active"></div><div class="bar"></div><div class="bar"></div></div>
+                1 of 3
+            </div>
+            <button class="btn-nav-action" onclick="navigateTo(4)">NEXT →</button>
+        </div>
+    </div>
+
+
+    <div class="card-frame" id="page-4">
+        <div style="width:100%">
+            <div class="chapter-title">Chapter 2: The Constellation of Memories</div>
+            <div class="header-title" style="font-size: 11px; margin-bottom: 10px;">(Interactive Timeline)</div>
+        </div>
+
+        <div class="timeline-book">
+            <div class="timeline-left-map">
+                <div class="map-inner-title">THE CONSTELLATIONS WE'VE WRITTEN</div>
+                <svg style="position:absolute; top:0; left:0; width:100%; height:100%;">
+                    <polyline points="30,80 110,140 220,170 300,90" fill="none" stroke="#d4af37" stroke-width="1.2"/>
+                    <line x1="110" y1="140" x2="280" y2="120" stroke="rgba(212,175,55,0.3)" stroke-width="0.8" stroke-dasharray="2,2"/>
+                    <polygon points="110,137 113,140 110,143 107,140" fill="#ffffff" stroke="#d4af37" stroke-width="1"/>
+                    <circle cx="220" cy="170" r="3" fill="#0f172a" stroke="#d4af37" stroke-width="1"/>
+                </svg>
+                <div class="tooltip-bubble bubble-1">Our first meteor shower,</div>
+                <div class="tooltip-bubble bubble-2">The night the galaxy made sense</div>
+            </div>
+            <div class="timeline-right-text">
+                The night the galaxy made sense, is hovering over as our first precious memory print and momentous sharing of this memory bubble.
+            </div>
+        </div>
+
+        <div class="nav-footer">
+            <button class="btn-nav-action" onclick="navigateTo(3)">← BACK</button>
+            <div class="indicator-box">
+                <div class="bar-container"><div class="bar active"></div><div class="bar active"></div><div class="bar"></div></div>
+                2 of 3
+            </div>
+            <button class="btn-nav-action" onclick="navigateTo(5)">NEXT →</button>
+        </div>
+    </div>
+
+
+    <div class="card-frame" id="page-5">
+        <div style="width:100%">
+            <div class="chapter-title">Chapter 3: Future Orbits</div>
+            <div class="header-title" style="font-size: 11px; margin-bottom: 10px;">(Conclusion & Wishes)</div>
+        </div>
+
+        <div class="ceremony-box">
+            <div class="bg-number num-top">3</div>
+            <div class="bg-number num-left">3</div>
+            <div class="bg-number num-right">4</div>
+            <div class="bg-number num-bottom">4</div>
+
+            <div class="ceremony-title">THE JOURNEY CONTINUES.</div>
+            <div class="ceremony-p">May your coming orbits be filled with a galaxy of shared laughter and a universe of joy.</div>
+            <div class="ceremony-p" style="color: #ffffff; font-weight: 600;">Happy Birthday, My Universe.</div>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="hbd-banner">HAPPY BIRTHDAY</div>
+        </div>
+
+        <div class="nav-footer">
+            <button class="btn-nav-action" onclick="navigateTo(4)">← BACK</button>
+            <div class="indicator-box">
+                <div class="bar-container"><div class="bar active"></div><div class="bar active"></div><div class="bar active"></div></div>
+                3 of 3
+            </div>
+            <div style="font-family:'Cinzel'; font-size: 9px; color: #5c6f8a; cursor: pointer; border: 1px dashed rgba(212,212,212,0.2); padding: 5px 8px; border-radius:3px;" onclick="navigateTo(1)">
+                REPLAY ↺
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(pageNumber) {
+            const pages = document.querySelectorAll('.card-frame');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const activePage = document.getElementById(`page-${pageNumber}`);
+            if (activePage) {
+                activePage.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
